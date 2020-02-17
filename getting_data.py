@@ -1,6 +1,5 @@
 import PySimpleGUI as sg
 from Hackschool_data import data
-from test import student
 
 def get_data(theme):
     Name = []

@@ -1,0 +1,2 @@
+def student():
+    pass
