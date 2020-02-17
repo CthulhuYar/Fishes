@@ -23,7 +23,7 @@ def get_data(theme):
         val.append(s)
         s = '    Дата проведения: {}'.format(Date[i])
         val.append(s)
-        s = '    Университеты, в которых она учитыается: {} ' .format(Universities[i])
+        s = '    Университеты, в которых она учитывается: {} ' .format(Universities[i])
         val.append(s)
         val.append('\n')
 
