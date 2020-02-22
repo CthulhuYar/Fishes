@@ -1,5 +1,5 @@
 import PySimpleGUI as sg
-from getting_data import get_data
+from getting_data import get_data, get_pre_olymp
 
 sg.theme('GreenTan')
 win2_active, win3_active = False, False
@@ -15,40 +15,43 @@ layout = [
 main_win = sg.Window('Хакатон', layout)
 while True:
     event1, values1 = main_win.read()
-    if event1 is None or event1=='Выход':
+    if event1 in (None, 'Выход'):
         break
     elif event1 == 'Вывод' and not win2_active:
         win2_active = True
         main_win.Hide()
         layout2 = [
-            [sg.Text('Вы выбрали предмет - {0}, для класса - {1}'.format(values1[1], values1[0]))],
-            [sg.Button('Выход'), sg.Button('Сохранить файл')]]
+            [sg.Text('Укажите в каких олимпиадах вы принимали участие и какие дипломы получили')],
+            [sg.Listbox(values = get_pre_olymp(values1[1], values1[0]), size = (40, 12), key = '-LIST-',
+                        enable_events=True)],
+            [sg.Button('Выход'), sg.Button('Далее')]]
 
         # Второе окно
         # Выбор заслуг и оценка сложности *в разработке*
         win2 = sg.Window('Список олимпиад', layout2)
         while True:
             event2, values2 = win2.Read()
-            if event2 is None or event2 == 'Выход':
+            if event2 in (None, 'Выход'):
                 win2.Close()
                 win2_active = False
                 main_win.UnHide()
                 break
 
-            elif event2 == 'Сохранить файл' and not win3_active:
+            elif event2 == 'Далее' and not win3_active:
                 win2_active, win3_active = False, True
                 win2.Hide()
 
                 layout3 = [
-                    [sg.Text('Индивидуальный подбор олимпиад по вашим ответам', size=(90, 1), font=("Helvetica", 9))],
-                    [sg.Listbox(values=get_data(values1[1]), size=(90, 20))],
+                    [sg.Text('Индивидуальный подбор олимпиад для вашего класса - {0} и профиля - {1}'
+                             .format(values1[0],values1[1]), size=(90, 1), font=("Helvetica", 9))],
+                    [sg.Listbox(values=get_data(values1[1], values1[0]), size=(90, 20))],
                     [sg.Button('Выход')]]
 
                 # Третье окно
                 win3 = sg.Window('Подборка олимпиад', layout3)
                 while True:
                     event3, values3 = win3.read()
-                    if event1 is None or event3 =='Выход':
+                    if event3 in (None, 'Выход'):
                         win3.Close()
                         win3_active = False
                         win2.UnHide()
